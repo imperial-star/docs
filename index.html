@@ -1,1 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoadMap Builder — создай свою дорожную карту</title>
+  <style>
+    :root {
+      --bg: #0f0f17;
+      --card: #161624;
+      --accent: #7c3aed;
+      --accent-dark: #5b21b6;
+      --text: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+    }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin: 0 0 2.5rem;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #a78bfa, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 1.5rem 0 2rem;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #334155;
+    }
+
+    .btn-secondary:hover {
+      background: #475569;
+    }
+
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .milestone {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .milestone:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .milestone-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #e0e7ff;
+    }
+
+    .milestone-period {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .milestone-content {
+      color: var(--text-secondary);
+      white-space: pre-wrap;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
+
+    .delete-btn:hover {
+      background: #b91c1c;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 4rem 1rem;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .controls { flex-direction: column; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>RoadMap Builder</h1>
+    <p>Простой конструктор дорожных карт / планов обучения / проектов</p>
+  </header>
+
+  <div class="controls">
+    <button onclick="addMilestone()">+ Добавить этап</button>
+    <button class="btn-secondary" onclick="clearAll()">Очистить всё</button>
+    <button class="btn-secondary" onclick="exportToJSON()">Сохранить (JSON)</button>
+    <button class="btn-secondary" onclick="document.getElementById('importFile').click()">
+      Загрузить
+    </button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+  </div>
+
+  <div class="roadmap" id="roadmap">
+    <!-- сюда добавляются этапы -->
+  </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+
+let milestones = [];
+
+function renderMilestones() {
+  const container = document.getElementById("roadmap");
+  container.innerHTML = "";
+
+  if (milestones.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        Пока нет ни одного этапа<br>
+        Нажми «Добавить этап» чтобы начать
+      </div>`;
+    return;
+  }
+
+  milestones.forEach((m, index) => {
+    const div = document.createElement("div");
+    div.className = "milestone";
+    div.innerHTML = `
+      <div class="milestone-header">
+        <div class="milestone-title" contenteditable="true" onblur="updateMilestone(${index}, 'title', this.innerText)">
+          ${m.title || "Новый этап"}
+        </div>
+        <div>
+          <span class="milestone-period" contenteditable="true" onblur="updateMilestone(${index}, 'period', this.innerText)">
+            ${m.period || "1–2 месяца"}
+          </span>
+          <button class="delete-btn" onclick="deleteMilestone(${index})">×</button>
+        </div>
+      </div>
+      <div class="milestone-content" contenteditable="true" onblur="updateMilestone(${index}, 'content', this.innerText)">
+        ${m.content || "• Цель\n• Что изучить\n• Проекты/задачи\n• Ресурсы"}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function addMilestone() {
+  milestones.push({
+    title: "",
+    period: "",
+    content: ""
+  });
+  renderMilestones();
+  // фокус на последнем заголовке
+  setTimeout(() => {
+    const last = document.querySelectorAll(".milestone-title");
+    if (last.length) last[last.length-1].focus();
+  }, 50);
+}
+
+function deleteMilestone(index) {
+  if (!confirm("Удалить этап?")) return;
+  milestones.splice(index, 1);
+  renderMilestones();
+}
+
+function updateMilestone(index, field, value) {
+  if (!milestones[index]) return;
+  milestones[index][field] = value.trim();
+}
+
+function clearAll() {
+  if (!confirm("Очистить всю карту?")) return;
+  milestones = [];
+  renderMilestones();
+}
+
+function exportToJSON() {
+  const data = JSON.stringify(milestones, null, 2);
+  const blob = new Blob([data], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "roadmap-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (Array.isArray(data)) {
+        milestones = data;
+        renderMilestones();
+      } else {
+        alert("Неверный формат файла");
+      }
+    } catch(err) {
+      alert("Ошибка чтения JSON");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ──────────────────────────────────────────────
+
+window.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.key === "Enter") {
+    addMilestone();
+  }
+});
+
+// первый запуск
+addMilestone();  // создаём один пустой этап при загрузке
+
+</script>
+</body>
+</html>
