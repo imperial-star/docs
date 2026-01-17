@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Документация · Быстрый просмотр</title>
+  <title>Документация</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/ImperGram/ImperGram/refs/heads/master/ic_launcher-playstore.png" type="image/png">
   <style>
     :root {
       --bg: #0d1117;
@@ -191,13 +192,11 @@
     <nav>
       <ul id="nav-list">
         <li><a href="#intro" class="active">Введение</a></li>
-        <li><a href="#install">Установка</a></li>
-        <li><a href="#usage">Быстрый старт</a></li>
-        <li><a href="#config">Конфигурация</a></li>
-        <li><a href="#api">API Reference</a></li>
-        <li><a href="#examples">Примеры</a></li>
-        <li><a href="#trouble">Устранение неисправностей</a></li>
-        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#settings">Настройка</a></li>
+        <li><a href="#roadmap">Дорожные карты</a></li>
+        <li><a href="#support">Поддержка</a></li>
+        <li><a href="#warning">Предупреждение</a></li>
+        <li><a href="#github">Репозиторий GitHub</a></li>
       </ul>
     </nav>
   </aside>
@@ -206,66 +205,47 @@
 
     <section id="intro">
       <h2>Введение</h2>
-      <p>Это пример современной документации с быстрым просмотром разделов. Всё на чистом HTML/CSS/JS.</p>
       <p>Особенности:</p>
       <ul>
-        <li>Фиксированный sidebar</li>
-        <li>Авто-подсветка активного раздела</li>
-        <li>Поиск по заголовкам</li>
-        <li>Переключение тёмной/светлой темы</li>
-        <li>Адаптив под мобильные</li>
+        <li>Сервис для систематизации информации</li>
+        <li>Облегчение создания проектов / рефератов / докладов и т.п</li>
+        <li>И многое другое</li>
       </ul>
     </section>
 
-    <section id="install">
-      <h2>Установка</h2>
-      <pre><code>npm install my-cool-lib
-# или
-yarn add my-cool-lib</code></pre>
-      <p>Поддерживаются все современные пакетные менеджеры.</p>
+    <section id="settings">
+      <h2>Настройки</h2>
+      <p>Использовать свое API:</p>
+      <ul>
+        <li>Получите ключ API на сайте https://aistudio.google.com/api-keys</li>
+        <li>Вставьте его в поле ниже и сохраните</li>
+      </ul>
     </section>
 
-    <section id="usage">
-      <h2>Быстрый старт</h2>
-      <pre><code>import { createApp } from 'my-cool-lib'
-
-const app = createApp({
-  target: '#app',
-  // ваши опции
-})</code></pre>
-    </section>
-
-    <section id="config">
-      <h2>Конфигурация</h2>
+    <section id="roadmap">
+      <h2>Дорожные карты</h2>
       <h3>Основные параметры</h3>
-      <pre><code>{
-  "theme": "dark",
-  "cache": true,
-  "timeout": 5000
-}</code></pre>
+      <ul>
+        <li>Название: название дорожной карты , отображается в перечне дорожных карт (роадмапов)</li>
+        <li>Описание: описание дорожной карты , отображается в перечне дорожных карт (роадмапов)</li>
+        <li>Тема для Gemini: тема по которой вы хотите составить дорожную карту (роадмап)</li>
+        <li>Уточнение для Gemini: уточнение / добавление информации о которыой вы хотите создать дорожную карту (роадмап)</li>
+      </ul>
     </section>
 
-    <section id="api">
-      <h2>API Reference</h2>
-      <h3>Метод .start()</h3>
-      <p>Запускает основной процесс...</p>
+    <section id="support">
+      <h2>Поддержка</h2>
+      <h3>https://t.me/oxxximif</h3>
     </section>
 
-    <section id="examples">
-      <h2>Примеры</h2>
-      <pre><code>// Пример 1
-app.on('ready', () => console.log('Готово!'))</code></pre>
+    <section id="warning">
+      <h2>Предупреждение</h2>
+      <h3>Разработчик не ручается за ошибки в ответе и ошибки api gemini</h3>
     </section>
 
-    <section id="trouble">
-      <h2>Устранение неисправностей</h2>
-      <p>Ошибка "Cannot find module" → проверьте node_modules</p>
-    </section>
-
-    <section id="faq">
-      <h2>Часто задаваемые вопросы</h2>
-      <h3>Можно ли использовать в продакшене?</h3>
-      <p>Да, уже используется в 150+ проектах.</p>
+    <section id="github">
+      <h2>GitHub</h2>
+      <h3>https://github.com/imperial-star/starwise</h3>
     </section>
 
   </main>
@@ -281,12 +261,10 @@ function toggleTheme() {
   localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
 }
 
-// Загружаем сохранённую тему
 if (localStorage.getItem('theme') === 'light') {
   document.body.classList.add('light');
 }
 
-// Подсветка активного пункта при скролле
 window.addEventListener('scroll', () => {
   const sections = document.querySelectorAll('section');
   const navLinks  = document.querySelectorAll('#nav-list a');
@@ -308,7 +286,6 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// Плавный скролл
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     e.preventDefault();
@@ -316,14 +293,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
-    // на мобильных закрываем меню
     if (window.innerWidth < 900) {
       toggleSidebar();
     }
   });
 });
 
-// Простой поиск по пунктам меню
 function filterNav(query) {
   query = query.toLowerCase();
   const items = document.querySelectorAll('#nav-list li');
