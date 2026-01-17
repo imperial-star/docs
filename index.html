@@ -1,1 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Документация · Быстрый просмотр</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --text: #c9d1d9;
+      --sidebar-bg: #161b22;
+      --accent: #58a6ff;
+      --border: #30363d;
+      --code-bg: #0d1117;
+    }
+    body.light {
+      --bg: #ffffff;
+      --text: #24292e;
+      --sidebar-bg: #f6f8fa;
+      --accent: #0366d6;
+      --border: #e1e4e8;
+      --code-bg: #f6f8fa;
+    }
 
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    #sidebar {
+      width: 260px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 1.5rem 0;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+
+    #sidebar-header {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+
+    #sidebar-header h1 {
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    #theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    #search {
+      width: 90%;
+      margin: 1rem auto;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    nav ul {
+      list-style: none;
+    }
+
+    nav a {
+      display: block;
+      padding: 0.6rem 1.5rem;
+      color: var(--text);
+      text-decoration: none;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background: rgba(88,166,255,0.12);
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+
+    main {
+      margin-left: 260px;
+      padding: 2.5rem 3rem;
+      max-width: 900px;
+    }
+
+    section {
+      margin-bottom: 4rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      color: var(--accent);
+      margin: 2rem 0 1rem;
+      font-size: 1.8rem;
+      scroll-margin-top: 80px;
+    }
+
+    h3 {
+      margin: 1.8rem 0 0.8rem;
+      font-size: 1.4rem;
+    }
+
+    pre {
+      background: var(--code-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border: 1px solid var(--border);
+    }
+
+    code {
+      font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      background: var(--code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 200;
+      background: var(--accent);
+      color: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      #sidebar {
+        transform: translateX(-100%);
+      }
+      #sidebar.open {
+        transform: translateX(0);
+      }
+      main {
+        margin-left: 0;
+        padding: 5rem 1.5rem 2rem;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<div class="wrapper">
+
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div style="display:flex; align-items:center; gap:1rem;">
+        <h1>Документация</h1>
+        <button id="theme-toggle" onclick="toggleTheme()">🌙</button>
+      </div>
+    </div>
+
+    <input type="text" id="search" placeholder="Поиск по разделам..." oninput="filterNav(this.value)">
+
+    <nav>
+      <ul id="nav-list">
+        <li><a href="#intro" class="active">Введение</a></li>
+        <li><a href="#install">Установка</a></li>
+        <li><a href="#usage">Быстрый старт</a></li>
+        <li><a href="#config">Конфигурация</a></li>
+        <li><a href="#api">API Reference</a></li>
+        <li><a href="#examples">Примеры</a></li>
+        <li><a href="#trouble">Устранение неисправностей</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+
+    <section id="intro">
+      <h2>Введение</h2>
+      <p>Это пример современной документации с быстрым просмотром разделов. Всё на чистом HTML/CSS/JS.</p>
+      <p>Особенности:</p>
+      <ul>
+        <li>Фиксированный sidebar</li>
+        <li>Авто-подсветка активного раздела</li>
+        <li>Поиск по заголовкам</li>
+        <li>Переключение тёмной/светлой темы</li>
+        <li>Адаптив под мобильные</li>
+      </ul>
+    </section>
+
+    <section id="install">
+      <h2>Установка</h2>
+      <pre><code>npm install my-cool-lib
+# или
+yarn add my-cool-lib</code></pre>
+      <p>Поддерживаются все современные пакетные менеджеры.</p>
+    </section>
+
+    <section id="usage">
+      <h2>Быстрый старт</h2>
+      <pre><code>import { createApp } from 'my-cool-lib'
+
+const app = createApp({
+  target: '#app',
+  // ваши опции
+})</code></pre>
+    </section>
+
+    <section id="config">
+      <h2>Конфигурация</h2>
+      <h3>Основные параметры</h3>
+      <pre><code>{
+  "theme": "dark",
+  "cache": true,
+  "timeout": 5000
+}</code></pre>
+    </section>
+
+    <section id="api">
+      <h2>API Reference</h2>
+      <h3>Метод .start()</h3>
+      <p>Запускает основной процесс...</p>
+    </section>
+
+    <section id="examples">
+      <h2>Примеры</h2>
+      <pre><code>// Пример 1
+app.on('ready', () => console.log('Готово!'))</code></pre>
+    </section>
+
+    <section id="trouble">
+      <h2>Устранение неисправностей</h2>
+      <p>Ошибка "Cannot find module" → проверьте node_modules</p>
+    </section>
+
+    <section id="faq">
+      <h2>Часто задаваемые вопросы</h2>
+      <h3>Можно ли использовать в продакшене?</h3>
+      <p>Да, уже используется в 150+ проектах.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+// Загружаем сохранённую тему
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light');
+}
+
+// Подсветка активного пункта при скролле
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section');
+  const navLinks  = document.querySelectorAll('#nav-list a');
+
+  let current = '';
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+
+// Плавный скролл
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+    // на мобильных закрываем меню
+    if (window.innerWidth < 900) {
+      toggleSidebar();
+    }
+  });
+});
+
+// Простой поиск по пунктам меню
+function filterNav(query) {
+  query = query.toLowerCase();
+  const items = document.querySelectorAll('#nav-list li');
+
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
